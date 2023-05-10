@@ -1,9 +1,9 @@
 class Node(object):
 
-    def __init__(self, label, code=None, value=None):
+    def __init__(self, label, code=None, id=None):
         self.label = label
         self.code = code
-        self.value = value
+        self.id = id
         self.child_nodes = None
 
     # end __init__
@@ -33,8 +33,8 @@ class Node(object):
 
 class Trie(object):
 
-    def insert(self, root, caracter, value):
-        root.add_child(Node(caracter, root.value, value))
+    def insert(self, root, caracter, id):
+        root.add_child(Node(caracter, root.id, id))
         return root
 
     # end insert
@@ -65,7 +65,7 @@ class Trie(object):
         if not root:
             return None
 
-        if root.value == code:
+        if root.id == code:
             return root
 
         if root.child_nodes is not None:
@@ -89,7 +89,7 @@ class Trie(object):
         prefix += root.label
 
         if root.label != "" and root.code is not None:
-            output.append([root.value, root.code, prefix])
+            output.append([root.id, root.code, prefix])
 
         if root.child_nodes is not None:
             for node in root.child_nodes:
@@ -104,7 +104,7 @@ class Trie(object):
             return None
 
         if root.label != "" and root.code is not None:
-            output.append([root.value, root.code, root.label])
+            output.append([root.id, root.code, root.label])
 
         if root.child_nodes is not None:
             for node in root.child_nodes:

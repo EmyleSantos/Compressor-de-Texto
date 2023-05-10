@@ -1,19 +1,19 @@
 import numpy as np
 import sys
-from trie.py import Trie, Node
+from trie import Trie, Node
 
-
+# Função responsável por criar a árvore de prefixos dado um texto
 def make_tree(text):
     Tree = Trie()
     root = Node("", 0, 0)
     i = 0
-    value = 1
+    id = 1
 
     while i < len(text):
         node = Tree.find_by_label(root, text[i])
 
         if not node:
-            root = Tree.insert(root, text[i], value)
+            root = Tree.insert(root, text[i], id)
             i += 1
         else:
             j = 0
@@ -21,24 +21,24 @@ def make_tree(text):
                 j += 1
                 aux = Tree.find_by_label(root, text[i:i + j])
                 if aux is None:
-                    node = Tree.insert(node, text[i + j - 1], value)
+                    node = Tree.insert(node, text[i + j - 1], id)
                     i += j
                     break
                 node = aux
             else:
                 # os últimos j simbolos do texto não foram inseridos na Trie
                 if i == len(text) - 1:
-                    root = Tree.insert(root, text[-1], value)
+                    root = Tree.insert(root, text[-1], id)
                 else:
                     node = Tree.find_by_label(root, text[i:-1])
-                    node = Tree.insert(node, text[-1], value)
+                    node = Tree.insert(node, text[-1], id)
                 break
 
-        value += 1
+        id += 1
 
-    Tree.num_codes = value - 1
+    Tree.num_codes = id - 1
     return Tree, root
-
+# end make_trie
 
 def compress(input_file_name, output_file_name):
 
@@ -91,7 +91,7 @@ def decompress(input_file_name, output_file_name):
     root = Node("", 0, 0)
 
     i = 21
-    value = 1
+    id = 1
 
     while i < len(bits):
 
@@ -114,10 +114,10 @@ def decompress(input_file_name, output_file_name):
         node = Tree.find_by_code(root, code)
 
         if node is not None:
-            node = Tree.insert(node, caracter, value)
+            node = Tree.insert(node, caracter, id)
 
         i += num_bits + caracter_size
-        value += 1
+        id += 1
 
     output = Tree.get_text(root, "", [])
     output.sort()
